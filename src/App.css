@@ -1,0 +1,35 @@
+.card {
+  display: flex;
+  border: 1px solid black;
+  justify-content: space-around;
+  margin-top: 5px;
+}
+
+.App {
+  padding: 15px;
+  width: 1200px;
+  margin: 5px auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.optional-menu {
+  display: flex;
+  padding: 15px;
+  align-items: center;
+}
+
+.optional-menu > button {
+  margin-left: 5px;
+}
+
+.delete-form {
+  margin-top: 15px;
+  margin-left: 15px;
+}
+
+.create-form {
+  border: 1px solid black;
+  margin-top: 15px;
+}
