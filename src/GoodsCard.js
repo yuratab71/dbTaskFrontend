@@ -2,45 +2,50 @@ import React, {useState} from 'react'
 import "./App.css";
 import {dbAPI} from "./API";
 
-function GoodsCard({id, name, categorie, price, rating}) {
+function GoodsCard({upd, id, name, categorie, price, rating, description}) {
     const [editMode, switchEditMode] = useState(false);
-
     const updateHandler = (e) => {
-        //e.preventDefault();
+        e.preventDefault();
         let data = e.target;
-        if (!data.name.value || data.name.value.length > 16){
-            console.log("error");
+        if (!data.name.value || data.name.value.length > 32){
+            alert("Вкажіть назву не більше 32 символів");
             return null;
         }
-        if (data.price.value % 1 !== 0) {
-            console.log("error");
+        if ( !data.price.value || (data.price.value % 1 !== 0)) {
+            alert("Введіть, або змініть некоректну ціну");
             return null;
         }
 
         let obj = {
-            id: id,
             name: data.name.value,
             categorie: data.categorie.value,
             price: data.price.value,
-            rating: data.rating.value
+            rating: data.rating.value,
+            description: data.description.value
         }
-
-        dbAPI.updateItem(JSON.stringify(obj)).then(data => {
-            console.log(data);
+        dbAPI.updateItem(id, obj).then(data => {
+            upd();
         })
     }
 
     const deleteSubmit = (e) => {
+        e.preventDefault();
         dbAPI.deleteItem(id).then(data => {
             console.log(data);
+            upd();
         })
     }
     
     return (
-        <div className="card" key={id}>
+        <>
+        <div className="cardOut" key={id}>
+            <div className="card">
             <div>
-                <h3><span>Назва: </span>{name}</h3>
+                <h2>{name}</h2>
             </div>
+            <div className="card-small">
+
+            
             <div>
                 <ul>
                     <li><span>Категорія: </span>{categorie}</li>
@@ -50,28 +55,30 @@ function GoodsCard({id, name, categorie, price, rating}) {
             </div>
             <div className="delete-form">
                 <form onSubmit={deleteSubmit} className="delete-form">
-                    <button>Видалити</button>
+                    <button className="option-button-item">Видалити</button>
                 </form>
 
             </div>
-            {editMode 
+            
+        </div>
+        {editMode 
             ?<div>
-                    <button onClick={() => switchEditMode(false)}>Close</button> 
+                    <button className="option-button-item" onClick={() => switchEditMode(false)}>Close</button> 
                     <form onSubmit={updateHandler}>
             <div>
-                <span>Назва</span><input name="name" type="text"/>
+                <span>Назва</span><input defaultValue={name} name="name" type="text"/>
             </div>
             <div>
-                <span>Категорія</span><select name="categorie">
-                    <option value="food">Food</option>
-                    <option vlaue="drinks">Drinks</option>
+                <span>Категорія</span><select defaultValue={categorie} name="categorie">
+                    <option value="AMD">AMD</option>
+                    <option vlaue="Intel">Intel</option>
                 </select>
             </div>
             <div>
-                <span>Ціна</span><input name="price" type="text"/>
+                <span>Ціна</span><input defaultValue={price} name="price" type="text"/>
             </div>
             <div>
-                <span>Рейтинг</span><select name="rating">
+                <span>Рейтинг</span><select defaultValue={rating} name="rating">
                     <option value={0}>0</option>
                     <option value={1}>1</option>
                     <option value={2}>2</option>
@@ -80,17 +87,26 @@ function GoodsCard({id, name, categorie, price, rating}) {
                     <option value={5}>5</option>
                 </select>
             </div>
+            <div>
+                <span>Опис</span><textarea defaultValue={description} type="text" name="description"/>
+            </div>
 
-           <button>Додати</button>
+           <button className="option-button-item">Додати</button>
         </form>
             </div>
             
             :
-            <div>
-                <button onClick={() => switchEditMode(true)}>Edit</button>   
+            <div className="edit-button">
+                <button className="option-button-item" onClick={() => switchEditMode(true)}>Edit</button>   
             </div>
         }
         </div>
+        
+        <div className="description">
+            {description}
+        </div>
+        </div>
+        </>
     )
 }
 

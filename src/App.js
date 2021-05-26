@@ -3,7 +3,7 @@ import Main from "./Main.js"
 
 function App() {
   return (
-    <div className="App">
+    <div>
         <Main/>
     </div>
   );

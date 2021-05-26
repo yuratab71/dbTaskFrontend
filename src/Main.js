@@ -4,7 +4,6 @@ import GoodsCard from "./GoodsCard";
 import ItemCreatorForm from './itemCreatorForm.js';
 
 class Main extends React.Component {
-    
     constructor(props){
         super(props);
         this.state = {
@@ -12,7 +11,6 @@ class Main extends React.Component {
             sortedList: []
         }
     }
-
     componentDidMount(){
         dbAPI.getData().then(data => {
             this.setState({
@@ -25,9 +23,7 @@ class Main extends React.Component {
     }
 
     handleBack(){
-        console.log("i work")
         let arr = this.state.list;
-        console.log(arr);
         this.setState({
             sortedList: arr
         })
@@ -46,7 +42,6 @@ class Main extends React.Component {
                     }
                 }
             }
-            console.log(arr);
             this.setState({
                 sortedList: arr
             })
@@ -65,46 +60,71 @@ class Main extends React.Component {
                     }
                 }
             }
-            console.log(arr);
             this.setState({
                 sortedList: arr
             })
     }
 
-    filterByDrink(){
-        let arr = this.state.list.filter(el => el.categorie === "Drinks");
+    filterByAMD(){
+        let arr = this.state.list.filter(el => el.categorie === "AMD");
         this.setState({
             sortedList: arr
         })
     }  
-    filterByFood(){
-        let arr = this.state.list.filter(el => el.categorie === "food");
+    filterByIntel(){
+        let arr = this.state.list.filter(el => el.categorie === "Intel");
         this.setState({
             sortedList: arr
         })
     }
 
+    update(){
+        dbAPI.getData().then(data => {
+            this.setState({
+                list: data,
+                sortedList: data
+            })
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+
     render () {
-        return  <div>
+        return <>
+        
                     <div className="optional-menu">
-                        <p>Main Page</p>
-                        <button onClick={this.handleSortRank.bind(this)}>Сортувати за рейтингом</button>
-                        <button onClick={this.handleSortPrice.bind(this)}>Сортувати за ціною</button>
-                        <button onClick={this.handleBack.bind(this)}>Усі</button>
-                        <button onClick={this.filterByFood.bind(this)}>Food</button>
-                        <button onClick={this.filterByDrink.bind(this)}>Drinks</button>
+                        <div className="option-item">
+                            <button className="option-button" onClick={this.handleSortRank.bind(this)}>Рейтинг</button>
+                        </div>
+                        <div className="option-item">
+                            <button className="option-button" onClick={this.handleSortPrice.bind(this)}>Ціна</button>
+                        </div>
+                        <div className="option-item">
+                            <button className="option-button" onClick={this.handleBack.bind(this)}>Усі</button>
+                        </div>
+                        <div className="option-item">
+                            <button className="option-button" onClick={this.filterByAMD.bind(this)}>AMD</button>
+                        </div>
+                        <div className="option-item">
+                            <button className="option-button" onClick={this.filterByIntel.bind(this)}>Intel</button>
+                        </div>   
                     </div>
-                    <div>
+                    <div className="App">
+
+                    {/* <div className="counter">
                         <span>Кількість: </span>{this.state.sortedList.length}
-                    </div>
+                    </div> */}
+                    <div className="item-list">
                     {this.state.sortedList.map(el => {
-                        return <GoodsCard id={el.id} name={el.name} categorie={el.categorie} price={el.price} rating={el.rating}/>
+                        return <GoodsCard upd={this.update.bind(this)} id={el._id} name={el.name} categorie={el.categorie} price={el.price} rating={el.rating} description={el.description}/>
                     })}
+                    </div>
 
                     <div className="create-form">
-                        <ItemCreatorForm/>
+                        <ItemCreatorForm upd={this.update.bind(this)}/>
                     </div>
                 </div>
+                </>
     }
 }
 

@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 const instance = axios.create({
-    baseURL: "http://localhost:5000/",
+    baseURL: "https://salty-ravine-76503.herokuapp.com/",
     headers: {
         "Access-Control-Allow-Origin": "*"
     }
@@ -25,8 +25,8 @@ const dbAPI = {
             return responce.data;
         })
     },
-    updateItem(body) {
-        return instance.put(``, JSON.parse(body)).then(responce => {
+    updateItem(id, body) {
+        return instance.put(`${id}`, body).then(responce => {
             return responce.data;
         })
     }
